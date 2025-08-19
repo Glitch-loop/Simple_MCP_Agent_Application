@@ -1,0 +1,4 @@
+"supabase"
+"fastapi[standard]"
+"mcp[cli]"
+"httpx"
