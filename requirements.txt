@@ -2,3 +2,4 @@
 "fastapi[standard]"
 "mcp[cli]"
 "httpx"
+"openai-agents"
