@@ -4,3 +4,4 @@
 /*.pyc
 /.env
 /management_server/__pycache__/
+/selling_server/__pycache__/

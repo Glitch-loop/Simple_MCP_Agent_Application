@@ -202,6 +202,7 @@ async def main():
     client = MCPClient()
     try:
         await client.connect_to_server(sys.argv[1])
+        await client.connect_to_server(sys.argv[2])
         await client.chat_tool()
     finally:
         await client.cleanup()

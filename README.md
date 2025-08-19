@@ -33,8 +33,8 @@ Command to run the application
 Note: Notice that we pass the path to the mcp server through the command
 
 ```
-    uv run .\agent_app\mcp_client.py D:\DOCUMENTS\self_study\Agents\mcp_server\management_server\mcp_management_server.py
-    
+    uv run .\agent_app\mcp_client.py D:\DOCUMENTS\self_study\Agents\mcp_server\management_server\mcp_management_server.py D:\DOCUMENTS\self_study\Agents\mcp_server\selling_server\mcp_selling_server.py
+
 ```
 
 ## Run web servers
@@ -47,5 +47,5 @@ Command to run the webservers
 
 **Selling server**
 ```
-    uvicorn management_server.management_server:app --reload --port 8000
+    uvicorn selling_server.selling_server:app --reload --port 8001
 ```

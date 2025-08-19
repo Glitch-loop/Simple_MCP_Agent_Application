@@ -12,6 +12,7 @@ from management_server.interfaces import (
 
 app = FastAPI()
 load_dotenv()
+
 def create_connection() -> Client:
     url: str = os.environ.get("SUPABASE_URL")
     key: str = os.environ.get("SUPABASE_KEY")

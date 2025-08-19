@@ -2,8 +2,10 @@ import os
 from supabase import create_client, Client
 from fastapi import FastAPI, Body
 from selling_server.interfaces import CreateClientRequest, UpdateClientRequest, CreateProductRequest, UpdateProductRequest, CreateSellingRequest, UpdateSellingRequest
+from dotenv import load_dotenv
 
 app = FastAPI()
+load_dotenv()
 
 def create_connection() -> Client:
     url: str = os.environ.get("SUPABASE_URL")
