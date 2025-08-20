@@ -14,7 +14,7 @@ load_dotenv()
 
 context_window = []
 
-class MCPClient:
+class MCPHostClient:
     def __init__(self):
         # Initialize session and client objects
         self.session: Optional[ClientSession] = None
@@ -91,7 +91,7 @@ class MCPClient:
         available_tools = [
             {   
                 "type": "function",
-                "name": tool.name,
+                "name": tool.name, 
                 "description": tool.description,
                 "parameters": tool.inputSchema
             } for tool in response.tools
@@ -166,7 +166,6 @@ class MCPClient:
         return any(
             output.type == "function_call" for output in response.output
         )
-
 
     async def chat_tool(self):
         "Run an interactive chat loop"
