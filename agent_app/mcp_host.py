@@ -41,20 +41,64 @@ class MCPHost:
         print("Creating agents...")
         self.system_manager_agent = Agent(
             name="System Manager Agent",
+            model="gpt-4.1",
             handoff_description="Specialist agent for system management tasks",
-            instructions="You are responsible for managing system configurations and settings. Ensure that all configurations are optimal and up-to-date.",
+            instructions="You are responsible for managing system configurations and settings. Depending on what the user ask you, you will choose between your tools the appropoate one for answering the query.",
             mcp_servers=[self.mcp_client_system_management.mcp_server]
         )
         self.selling_server_agent = Agent(
             name="Selling Server Agent",
+            model="gpt-4.1",
             handoff_description="Specialist agent for selling server tasks",
-            instructions="You handle all operations related to the selling server, including managing clients, products, and sales records. Ensure data integrity and efficient processing of requests.",
+            instructions="You handle all operations related to the selling server, including managing clients, products, and sales records. Depending on what the user ask you, you will choose between your tools the appropoate one for answering the query.",
             mcp_servers=[self.mcp_client_selling_server.mcp_server]
         )
+
+        orchestrator_prompt = """
+            #############################
+            SECURITY
+
+            You are responsible for authenticating the user before performing any actions. Always follow these steps:
+
+            User Identification:
+            Prompt the user to identify themselves. If the user has already been authenticated in the current conversation state, proceed to the next step. If not, check the database to verify the user's existence.
+
+            Privilege Verification:
+            After identifying the user, check their privileges to determine if they are authorized to perform the requested operation. Note that privileges for actions like delete, update, or insert also implicitly grant permission to retrieve or list data (e.g., if a user can delete, they can also get or list clients).
+
+            Action Execution:
+            Only after successful authentication and privilege verification should you proceed to perform the requested action.
+
+            #######################################################
+
+            Context
+            You are the orchestrator agent. Your role is to determine which specialist agent (System Manager or Selling Server) 
+            is best suited to handle the user's request. 
+            
+            Analyze the request carefully and delegate it to the appropriate agent. 
+            If the request involves system configurations, delegate it to the System Manager Agent. If it involves client, product, 
+            or sales management, delegate it to the Selling Server Agent. Ensure smooth communication and task handoff between agents. 
+            
+            #############################
+            SECURITY
+
+            You are responsible for authenticating the user before performing any actions. Always follow these steps:
+
+            User Identification:
+            Prompt the user to identify themselves. If the user has already been authenticated in the current conversation state, proceed to the next step. If not, check the database to verify the user's existence.
+
+            Privilege Verification:
+            After identifying the user, check their privileges to determine if they are authorized to perform the requested operation. Note that privileges for actions like delete, update, or insert also implicitly grant permission to retrieve or list data (e.g., if a user can delete, they can also get or list clients).
+
+            Action Execution:
+            Only after successful authentication and privilege verification should you proceed to perform the requested action.
+
+        """
         self.orchestrator_agent = Agent(
             name="Orchestrator Agent",
+            model="gpt-4.1",
             handoff_description="Agent that orchestrates tasks between the System Manager and Selling Server agents",
-            instructions="You are the orchestrator agent. Your role is to determine which specialist agent (System Manager or Selling Server) is best suited to handle the user's request. Analyze the request carefully and delegate it to the appropriate agent. If the request involves system configurations, delegate it to the System Manager Agent. If it involves client, product, or sales management, delegate it to the Selling Server Agent. Ensure smooth communication and task handoff between agents.",
+            instructions=orchestrator_prompt,
             handoffs=[self.system_manager_agent, self.selling_server_agent]
         )
 
